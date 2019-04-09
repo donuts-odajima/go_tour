@@ -3,6 +3,7 @@ package main
 import(
 	"fmt"
 	"math"
+	"runtime"
 )
 
 func sqrt(x float64) string {
@@ -28,11 +29,22 @@ func pow(x, n, lim float64) float64 {
 func Sqrt(x float64) float64 {
 	z := float64(1)
 	count := 0
-	for ; count < 10; count++ {
+	before := z + 1
+	for ; math.Abs(z - before) > 1e-10; count++ {
+		before = z
 		z -= (z*z - x) / (2*z)
 	}
 	fmt.Println(count, " loop")
 	return z
+}
+
+func helloWorld() {
+	// defer ステートメントは、defer へ渡した関数の実行を呼び出し元の関数の終わりまで遅延させるもの
+	// ただしdefer へ渡した関数の引数はすぐに評価される
+	// defer が複数ある場合にはstackされていく。そのため最後に書いたdefer から実行される
+	defer fmt.Println("!!")
+	defer fmt.Printf("world")
+	fmt.Printf("hello ")
 }
 
 func main() {
@@ -70,4 +82,19 @@ func main() {
 	)
 
 	fmt.Println(Sqrt(25))
+
+	// switch文もif と似ている。というかif の省略形みたいな感じ
+	// はじめに簡単なステートメントを挟むことができる
+	// if　の省略形なので、一つにcaseに当てはまった場合は残りのcaseは実行されない
+	fmt.Printf("Go runs on ")
+	switch os := runtime.GOOS; os {
+	case "darwin":
+		fmt.Println("OS X")
+	case "linux":
+		fmt.Println("Linux")
+	default:
+		fmt.Printf("%s\n", os)
+	}
+
+	helloWorld()
 }
