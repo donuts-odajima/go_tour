@@ -56,7 +56,7 @@ func fibonacci() func() int {
 	fibArr := []int{0, 1}
 	return func() int {
 		ret := fibArr[0]
-		fibArr = append(fibArr, fibArr[0] + fibArr[1])[1:]
+		fibArr = append(fibArr, fibArr[0]+fibArr[1])[1:]
 		return ret
 	}
 }
